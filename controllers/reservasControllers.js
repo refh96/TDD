@@ -31,7 +31,7 @@ const createReservas = (req,res)=>{
 }
 
 const getReservas = (req, res)=>{
-    reservas.find().populate({path:'[categoria]'}).exec((error, reservas) => {
+    reservas.find().populate({path:'categoria'}).exec((error, reservas) => {
         if(error){
             return res.status(400).send({message:"No se pudo realizar la busqueda"})
         }

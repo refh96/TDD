@@ -11,6 +11,7 @@ const serviciosRoute = require('./routes/serviciosRoute');
 const categoriaRoutes = require('./routes/categoriaRoutes');
 const usuariosRoutes = require('./routes/usuariosRoutes');
 const reservasRoutes = require('./routes/reservasRoutes');
+const mailerRoutes = require('./routes/mailerRoutes')
 
 
 app.use(cors());
@@ -20,6 +21,7 @@ app.use('/api', serviciosRoute);
 app.use('/api', categoriaRoutes);
 app.use('/api', usuariosRoutes);
 app.use('/api', reservasRoutes);
+app.use('/api', mailerRoutes);
 
 
 mongoose.set('useNewUrlParser', true);

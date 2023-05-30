@@ -1,8 +1,10 @@
 const usuarios = require('../models/usuarios');
 const Regex = require('../utils/testRegex');
+const bcrypt = require('bcrypt');
 
-const createUsuario = (req, res) => {
-  const { nombre, apellido,  numero, correo, contraseña, status, rol } = req.body;
+const createUsuario = async (req, res) => {
+  const contraseña = await bcrypt.hash(req.body.contraseña, 10);
+  const { nombre, apellido,  numero, correo, status, rol } = req.body;
   const newUsuario = new usuarios({
     nombre,
     apellido,
@@ -27,11 +29,33 @@ const createUsuario = (req, res) => {
   else {
   newUsuario.save((error, usuario) => {
     if (error) {
+      console.log('1',error)
       return res.status(400).send({ message: "No se pudo crear el usuario" })
     }
     return res.status(201).send(usuario)
   })
 }}
+
+const loginUsuario = async (req, res) =>{
+  const {correo,contraseña} = req.body;
+  usuarios.findOne({correo}, (error, usuario) =>{
+    if(error){
+      return res.status(400).send({message:"error al iniciar sesion"})
+    }
+    if(!usuario){
+      return res.status(404).send({message:"no se encontro el usuario"})
+    }
+    bcrypt.compare(contraseña, usuario.contraseña, (error, resultado) =>{
+      if(error){
+        return res.status(400).send({message:"error al iniciar sesion"})
+      }
+      if(!resultado){
+        return res.status(404).send({message:"contraseña incorrecta"})
+      }
+      return res.status(200).send({usuario:usuario, resultado:resultado})
+    })
+  })
+}
 
 const getUsuarios = (req, res) => {
   usuarios.find({}, (error, usuarios) => {
@@ -88,5 +112,6 @@ module.exports = {
   getUsuarios,
   updateUsuario,
   deleteUsuario,
-  getUsuario
+  getUsuario,
+  loginUsuario
 }
