@@ -9,6 +9,8 @@ dotenv.config();
 
 const serviciosRoute = require('./routes/serviciosRoute');
 const categoriaRoutes = require('./routes/categoriaRoutes');
+const usuariosRoutes = require('./routes/usuariosRoutes');
+const reservasRoutes = require('./routes/reservasRoutes');
 
 
 app.use(cors());
@@ -16,6 +18,8 @@ app.use(express.json());
 app.options('*', cors());
 app.use('/api', serviciosRoute);
 app.use('/api', categoriaRoutes);
+app.use('/api', usuariosRoutes);
+app.use('/api', reservasRoutes);
 
 
 mongoose.set('useNewUrlParser', true);

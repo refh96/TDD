@@ -4,10 +4,10 @@ const categoria = require('./categoria');
 const Schema = mongoose.Schema;
 
 const reservaSchema = new Schema({
-  clienteId: {
+  usuarioId: {
     type: Schema.ObjectId,
     required: true,
-    ref: 'clientes'
+    ref: 'usuarios'
   },
   servicioId: {
     type: Schema.ObjectId,

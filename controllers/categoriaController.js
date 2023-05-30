@@ -22,7 +22,7 @@ const createCategoria = (req, res) => {
             if(!reservas){
                 return res.status(400).send({message:"no se encontro la reserva"})
             }
-            return res.status(200).send({message: "servicio modificado"})
+            return res.status(200).send({message: "categoria agregada a las reservas"})
 
         })
 

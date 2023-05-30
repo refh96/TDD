@@ -1,48 +1,92 @@
-const Usuarios = require('../models/usuarios');
+const usuarios = require('../models/usuarios');
+const Regex = require('../utils/testRegex');
 
 const createUsuario = (req, res) => {
-  const { nombre, correo, contraseña } = req.body;
-  const newUsuario = new Usuarios({
+  const { nombre, apellido,  numero, correo, contraseña, status, rol } = req.body;
+  const newUsuario = new usuarios({
     nombre,
+    apellido,
+    numero,
     correo,
-    contraseña
+    contraseña,
+    status,
+    rol
   });
-
+  if(!Regex.nombreRegex(nombre)){
+    return res.status(400).send({ message: "Mal formato de nombre" })
+  }
+  else if(!Regex.nombreRegex(apellido)){
+    return res.status(400).send({ message: "Mal formato de apellido" })
+  }
+  else if(!Regex.correoRegex(correo)){
+    return res.status(400).send({ message: "Mal formato de correo" })
+  }
+  else if(!Regex.numeroRegex(numero)){
+    return res.status(400).send({ message: "Mal formato de numero" })
+  }
+  else {
   newUsuario.save((error, usuario) => {
     if (error) {
-      return res.status(400).send({ message: "No se pudo crear el usuario" });
+      return res.status(400).send({ message: "No se pudo crear el usuario" })
     }
-    return res.status(201).send(usuario);
-  });
-};
+    return res.status(201).send(usuario)
+  })
+}}
 
 const getUsuarios = (req, res) => {
-  Usuarios.find({}, (error, usuarios) => {
+  usuarios.find({}, (error, usuarios) => {
     if (error) {
-      return res.status(400).send({ message: "No se pudo realizar la búsqueda" });
+      return res.status(400).send({ message: "No se pudo realizar la búsqueda" })
     }
     if (usuarios.length === 0) {
-      return res.status(404).send({ message: "No se encontraron usuarios" });
+      return res.status(404).send({ message: "No se encontraron usuarios" })
     }
-    return res.status(200).send(usuarios);
-  });
-};
+    return res.status(200).send(usuarios)
+  })
+}
 
 const updateUsuario = (req, res) => {
-  const { id } = req.params;
-  Usuarios.findByIdAndUpdate(id, req.body, (error, usuario) => {
+  const { id } = req.params
+  usuarios.findByIdAndUpdate(id, req.body, (error, usuario) => {
     if (error) {
-      return res.status(400).send({ message: "No se pudo actualizar el usuario" });
+      return res.status(400).send({ message: "No se pudo actualizar el usuario" })
     }
     if (!usuario) {
-      return res.status(404).send({ message: "No se encontró el usuario" });
+      return res.status(404).send({ message: "No se encontró el usuaraio" })
     }
-    return res.status(200).send({ message: "Usuario actualizado" });
-  });
-};
+    return res.status(200).send({ message: "usuario actualizado" })
+  })
+}
 
+const deleteUsuario = (req, res) => {
+  const {id} = req.params
+  usuarios.findByIdAndDelete(id, (error, usuario)=>{
+      if(error){
+          return res.status(400).send({message: "No se a podido eliminar el usuario"})
+      }
+      if(!usuario){
+          return res.status(404).send({message:"No se a podido encontrar el usuario"})
+      }
+      return res.status(200).send({message: "Se a eliminado de forma correcta el usuario"})
+  })
+
+}
+const getUsuario = (req, res) => {
+  const {id} = req.params
+  usuarios.findById(id, (error, usuario)=>{
+      if(error){
+          return res.status(400).send({message: "No se a podido modificar el usuario"})
+      }
+      if(!usuario){
+          return res.status(404).send({message:"No se a podido encontrar el usuario"})
+      }
+      return res.status(200).send(usuario)
+  })
+}
 module.exports = {
   createUsuario,
   getUsuarios,
-  updateUsuario
-};
+  updateUsuario,
+  deleteUsuario,
+  getUsuario
+}

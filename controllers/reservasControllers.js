@@ -1,8 +1,10 @@
+const usuarios = require('../models/usuarios');
 const reservas = require('../models/reservas');
 const createReservas = (req,res)=>{
-    const {clienteId, servicioId, fecha, categoria} = req.body
+    const {usuarioId, servicioId, fecha, categoria} = req.body
+    const {id} = req.params
     const newReservas = new reservas({
-    clienteId,
+    usuarioId,
     servicioId,
     fecha,
     categoria
@@ -11,7 +13,20 @@ const createReservas = (req,res)=>{
         if(error){
             return res.status(400).send({message:"no se a podido crear la reserva"})
         }
-        return res.status(201).send(reservas)
+        if(id == undefined || id == null || id == ''){
+            return res.status(201).send(reservas)
+        }
+        usuarios.updateOne({_id:id}, {$push:{reservas:reservas._id}}, (error, usuarios) => {
+            if(error){
+                console.log('2',error)
+                return res.status(400).send({message:"no se pudo actualizar el cliente"})
+            }
+            if(!usuarios){
+                return res.status(400).send({message:"no se encontro el cliente"})
+            }
+            return res.status(200).send({message: "reserva agregada al cliente"})
+
+        })
     })
 }
 

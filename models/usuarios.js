@@ -1,14 +1,49 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
-
 const usuarioSchema = new Schema({
-  nombre: String,
-  email: String,
-  contraseña: String,
-  rol: String,
-  // ...otros campos relevantes...
+    nombre:{
+        type: String,
+        required: true,
+        minLength: 1,
+        maxLength: 50
+    },
+    apellido:{
+        type: String,
+        required: true,
+        minLength: 1,
+        maxLength: 50
+    },
+    numero:{
+        type: Number,
+        required: true
+    },
+    correo: {
+        type: String,
+        required: true,
+        minLength: 1,
+        maxLength: 50
+    },
+    contraseña:{
+        type: String,
+        required: true,
+        minLength: 1,
+        maxLength:50
+    },
+    status:{
+        type: String,
+        required: false,
+        enum: [
+            'Permitido',
+            'Bloqueado'
+        ]
+    },
+    rol: {
+        type: String,
+        enum: [
+        'admin',
+        'cliente'
+    ]
+    }
 });
 
-const Usuario = mongoose.model('Usuario', usuarioSchema);
-
-module.exports = Usuario;
+module.exports = mongoose.model('usuario', usuarioSchema);
