@@ -12,7 +12,7 @@ const categoriaRoutes = require('./routes/categoriaRoutes');
 const usuariosRoutes = require('./routes/usuariosRoutes');
 const reservasRoutes = require('./routes/reservasRoutes');
 const mailerRoutes = require('./routes/mailerRoutes')
-
+const fileRoutes = require('./routes/filesRoutes')
 
 app.use(cors());
 app.use(express.json());
@@ -22,6 +22,7 @@ app.use('/api', categoriaRoutes);
 app.use('/api', usuariosRoutes);
 app.use('/api', reservasRoutes);
 app.use('/api', mailerRoutes);
+app.use('/api', fileRoutes);
 
 
 mongoose.set('useNewUrlParser', true);
