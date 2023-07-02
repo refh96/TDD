@@ -12,4 +12,4 @@ COPY . .
 
 EXPOSE 80
 
-CMD [ "yarn", "run", "dev" ]
+CMD [ "npm", "run", "dev" ]
