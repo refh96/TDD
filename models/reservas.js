@@ -21,7 +21,18 @@ const reservaSchema = new Schema({
   categoria:{
     type:[Schema.ObjectId],
     ref: categoria
-}
+  },
+  status:{
+    type: String,
+    required: true,
+    enum: [
+        'Pendiente',
+        'Confirmado',
+        'EnProceso',
+        'Rechazado',
+        'Finalizado'
+    ]
+  }
 });
 
 module.exports = mongoose.model('reserva', reservaSchema)

@@ -1,7 +1,7 @@
 const express= require('express')
 const fileController = require('../controllers/fileController')
-const upload = require('../middlewares/handleMulter')
-const fileSize = require('../middlewares/fileSize')
+const upload = require('../middlewares/handleMulter.js')
+const fileSize = require('../middlewares/fileSize.js')
 
 const api= express.Router()
 

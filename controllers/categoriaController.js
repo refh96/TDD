@@ -1,10 +1,11 @@
 const categoria = require('../models/categoria')
 const reservas = require('../models/reservas')
 const createCategoria = (req, res) => {
-    const {nombre} = req.body
+    const {nombre, descripcion} = req.body
     const {id} = req.params
     const newCategoria = new categoria({
-        nombre
+        nombre,
+        descripcion
     })
     newCategoria.save((error, categoria) => {
         if(error){

@@ -1,6 +1,6 @@
 const fileSizeError = (err, req, res, next)=>{
     if(err){
-        return res.status(413).send({message:"El archivo es demaciado grande"})
+        return res.status(413).send({message:"El archivo es muy grande"})
     }else{
         next()
     }

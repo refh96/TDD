@@ -29,21 +29,6 @@ const usuarioSchema = new Schema({
         required: true,
         minLength: 1,
         maxLength:100
-    },
-    status:{
-        type: String,
-        required: false,
-        enum: [
-            'Permitido',
-            'Bloqueado'
-        ]
-    },
-    rol: {
-        type: String,
-        enum: [
-        'admin',
-        'cliente'
-    ]
     }
 });
 

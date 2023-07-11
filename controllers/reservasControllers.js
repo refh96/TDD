@@ -1,14 +1,26 @@
 const usuarios = require('../models/usuarios');
 const reservas = require('../models/reservas');
-const createReservas = (req,res)=>{
-    const {usuarioId, servicioId, fecha, categoria} = req.body
+
+const createReservas = (req,res) => {
+    const {usuarioId, servicioId, fecha, categoria,status} = req.body
     const {id} = req.params
     const newReservas = new reservas({
     usuarioId,
     servicioId,
     fecha,
-    categoria
+    categoria,
+    status
     })
+    const now = new Date
+    const nextMonth = new Date
+    nextMonth.setDate(nextMonth.getDate() + 30)
+    const inicio = new Date(fecha)
+    if(inicio < now){
+        return res.status(400).send({ message: 'Error, fecha de reserva fuera de rango'})
+    }
+    else if(inicio > nextMonth){
+        return res.status(400).send({ message: 'Error, fechas están fuera del periodo de un mes'})
+    }
     newReservas.save((error, reservas)=>{
         if(error){
             return res.status(400).send({message:"no se a podido crear la reserva"})
@@ -19,12 +31,12 @@ const createReservas = (req,res)=>{
         usuarios.updateOne({_id:id}, {$push:{reservas:reservas._id}}, (error, usuarios) => {
             if(error){
                 console.log('2',error)
-                return res.status(400).send({message:"no se pudo actualizar el cliente"})
+                return res.status(400).send({message:"no se pudo actualizar el usuario"})
             }
             if(!usuarios){
-                return res.status(400).send({message:"no se encontro el cliente"})
+                return res.status(400).send({message:"no se encontro el usuario"})
             }
-            return res.status(200).send({message: "reserva agregada al cliente"})
+            return res.status(200).send({message: "reserva agregada"})
 
         })
     })

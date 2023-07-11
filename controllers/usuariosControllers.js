@@ -4,15 +4,13 @@ const bcrypt = require('bcrypt');
 
 const createUsuario = async (req, res) => {
   const contraseña = await bcrypt.hash(req.body.contraseña, 10);
-  const { nombre, apellido,  numero, correo, status, rol } = req.body;
+  const { nombre, apellido,  numero, correo } = req.body;
   const newUsuario = new usuarios({
     nombre,
     apellido,
     numero,
     correo,
-    contraseña,
-    status,
-    rol
+    contraseña
   });
   if(!Regex.nombreRegex(nombre)){
     return res.status(400).send({ message: "Mal formato de nombre" })
@@ -56,6 +54,34 @@ const loginUsuario = async (req, res) =>{
     })
   })
 }
+
+const changeStatus = (req, res) => {
+  const { id } = req.params
+  const query = usuarios.findById(id)
+  query.exec((error, usuario) => {
+      if(error){
+          return res.status(400).send({ message: "No se pudo actualizar el usuario 1" })
+      }
+      if(usuario.status === 'Bloqueado'){
+          usuario.updateOne({status: 'Permitido'}).exec((error) => {
+              if(error){
+                  return res.status(400).send({ message: "No se pudo actualizar el usuario 2" })
+              }
+              return res.status(200).send({ message: "Status actualizado a Permitido" })
+          })
+      }
+      else{
+          usuario.updateOne({status: 'Bloqueado'}).exec((error) => {
+              if(error){
+                  return res.status(400).send({ message: "No se pudo actualizar el usuario :"+error })
+              }
+              return res.status(200).send({ message: "Status actualizado a Bloqueado" })
+          })
+
+      }
+  })
+}
+
 
 const getUsuarios = (req, res) => {
   usuarios.find({}, (error, usuarios) => {
@@ -110,6 +136,7 @@ const getUsuario = (req, res) => {
 module.exports = {
   createUsuario,
   getUsuarios,
+  changeStatus,
   updateUsuario,
   deleteUsuario,
   getUsuario,
